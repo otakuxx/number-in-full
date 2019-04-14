@@ -5,7 +5,7 @@ import com.otakux.number.full.NumbersMap;
 import com.otakux.number.full.NumbersMapCardinal;
 import com.otakux.number.full.NumbersMapOrdinal;
 
-public class Teste1 {
+public class MainTest {
     public static void main(String[] args) {
 
         //NumberText.Element result = numberText.parse(6827000367298783L );
