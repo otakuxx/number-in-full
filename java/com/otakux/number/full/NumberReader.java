@@ -234,7 +234,7 @@ public class NumberReader {
         return _next;
     }
 
-    private static String append(Element _element, String text, String parte, String concator){
+    private String append(Element _element, String text, String parte, String concator){
         _element.concat = concator;
 
         if( text == null ) text =   parte;
