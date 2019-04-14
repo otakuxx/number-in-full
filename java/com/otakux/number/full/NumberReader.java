@@ -26,7 +26,7 @@ public class NumberReader {
         @Expose private long element;
         @Expose private long rest;
         @Expose private long base;
-        @Expose private long baseClasss;
+        @Expose private long baseClass;
         @Expose private long sumInClass;
         @Expose private long value;
         @Expose private String concat;
@@ -91,7 +91,7 @@ public class NumberReader {
         _element.base = numbersMap.getStartBase();
         _element.rest = value;
         _element.element = _element.rest / _element.base;
-        _element.baseClasss = numbersMap.getStartClass();
+        _element.baseClass = numbersMap.getStartClass();
         _element.sumInClass = 0;
         _element.value = 0;
         _element.concat = "";
@@ -110,8 +110,8 @@ public class NumberReader {
      * Iterar todas as base da maior a menor
      *  * A proxima base a se iterar sera a base atual dividido por dez enguanto a base atual maior que 10  <br/>
      *  * O proximo rest da iteração (resto) é igual ao resto da vivisão do rest atual pela base atual    <br/>
-     *  * A proxima baseClasss a se iterar ser o rest da calse atual dividodo por 10                           <br/>
-     *  * * Se o resultado da proxima baseClasss menor que 0 então a baseClasss voltara a baseClasss das centenas (100) <br/>
+     *  * A proxima baseClass a se iterar ser o rest da calse atual dividodo por 10                           <br/>
+     *  * * Se o resultado da proxima baseClass menor que 0 então a baseClass voltara a baseClass das centenas (100) <br/>
      *                                                                                                      <br/>
      *                                                                                                      <br/>
      *   <h2>Principal algoritimo</h2>                                                                      <br/>
@@ -119,9 +119,9 @@ public class NumberReader {
      *     rest %= base;                                                                                     <br/>
      *     base /= 10;                                                                                        <br/>
      *     element = rest / base;                                                                          <br/>
-     *     baseClasss /= 10;                                                                                      <br/>
-     *     if( baseClasss < 1 ) {                                                                                 <p style= "margin: 10 ">
-     *            baseClasss = 100;                                                                               <br/>
+     *     baseClass /= 10;                                                                                      <br/>
+     *     if( baseClass < 1 ) {                                                                                 <p style= "margin: 10 ">
+     *            baseClass = 100;                                                                               <br/>
      *            sumInClass = 0;                                                                       <br/>
      *                                                                                                        </p>
      *     }                                                                                                  <br/></p>
@@ -145,8 +145,8 @@ public class NumberReader {
 
         if (debug) System.out.println("Next: " + _next);
 
-        /* Quando o numero for de zero absuluto (element 0 da base 1 da baseClasss 1 sem nada acomulado até então) */
-        if( _element.element == 0 && _element.baseClasss == 1 && _element.base == 1 && _element.value == 0 ) {
+        /* Quando o numero for de zero absuluto (element 0 da base 1 da baseClass 1 sem nada acomulado até então) */
+        if( _element.element == 0 && _element.baseClass == 1 && _element.base == 1 && _element.value == 0 ) {
             String nextPart = numbersMap.get( _element.element).getName();
             text = append( _element, text, nextPart, "" );
             if (debug) System.err.println("InIf(1): " + _element);
@@ -155,7 +155,7 @@ public class NumberReader {
             Se existir o mapeamentos desses valores no numbersMap enão processar esse rest isto é:
                 Quando o rest do proximo algarismos + 10 existirem no mapeamento
         */
-        } else if( _element.baseClasss == 10 && _element.element == 1 && _next != null && numbersMap.get( _next.element +10 ) != null ) {
+        } else if( _element.baseClass == 10 && _element.element == 1 && _next != null && numbersMap.get( _next.element +10 ) != null ) {
             _element = _next;
 
             String nextPart = numbersMap.get( _element.element +10 ).getName();
@@ -166,14 +166,14 @@ public class NumberReader {
         /* Para os algarismos maiores que zero e não for para excluir o rest da base para o element atual
             * ex: escluir o rest do element 1 para a base 1000 (isto é em vez de Um Mil seria apenas Mil )
         * */
-        //    inClass: {"valueName":"Um Milhão Um Mil","element":1,"rest":1942,"base":1000,"baseClasss":1,"sumInClass":1000,"value":1001000,"concat":" "}
+        //    inClass: {"valueName":"Um Milhão Um Mil","element":1,"rest":1942,"base":1000,"baseClass":1,"sumInClass":1000,"value":1001000,"concat":" "}
         } else if( ( _element.element > 0 && numbersMap.includElementName( _element.base, _element.element ) ) || ( _element.element > 0 && _element.sumInClass > _element.base * 2 ) ){
 
             String nextPart;
-            if( _element.baseClasss == 100 && _next != null && ( _next.element > 0 || next( _next ).element > 0 ) ) {
-                nextPart = numbersMap.get( _element.element * _element.baseClasss).getComplexName();
+            if( _element.baseClass == 100 && _next != null && ( _next.element > 0 || next( _next ).element > 0 ) ) {
+                nextPart = numbersMap.get( _element.element * _element.baseClass).getComplexName();
             } else {
-                nextPart = numbersMap.get( _element.element * _element.baseClasss).getName();
+                nextPart = numbersMap.get( _element.element * _element.baseClass).getName();
             }
             text = append( _element, text, nextPart, _element.concat);
             if (debug) System.err.println("InIf(3): " + _element);
@@ -207,13 +207,13 @@ public class NumberReader {
         _next.base =  _element.base / 10;
 
         _next.element = _next.rest / _next.base;
-        _next.baseClasss = _element.baseClasss / 10;
+        _next.baseClass = _element.baseClass / 10;
         _next.sumInClass = _element.sumInClass;
         _next.value = _element.value;
 
         _next.concat = numbersMap.getConcatSeparator();
-        if( _next.baseClasss < 1 ){
-            _next.baseClasss = 100;
+        if( _next.baseClass < 1 ){
+            _next.baseClass = 100;
             _next.sumInClass = 0;
 
         }
