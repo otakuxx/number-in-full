@@ -23,8 +23,6 @@ public class NumberReader {
     public class Element {
 
         @Expose private String valueName;
-        private String elementName;
-        private String elementClassName;
         @Expose private long element;
         @Expose private long rest;
         @Expose private long base;
@@ -48,9 +46,7 @@ public class NumberReader {
             return valueName;
         }
 
-        public String getElementName() {
-            return elementName;
-        }
+
 
         public NumbersMap getNumbersMap() {
             return numbersMap;
@@ -145,13 +141,14 @@ public class NumberReader {
 
         Element _next = null;
         String classConcat = " ";
-        if (_element.base > 10 ) _next = next(_element);
+        if (_element.base/10  > 0 ) _next = next(_element);
+
+        if (debug) System.out.println("Next: " + _next);
 
         /* Quando o numero for de zero absuluto (element 0 da base 1 da baseClasss 1 sem nada acomulado até então) */
         if( _element.element == 0 && _element.baseClasss == 1 && _element.base == 1 && _element.value == 0 ) {
             String nextPart = numbersMap.get( _element.element).getName();
             text = append( _element, text, nextPart, "" );
-            _element.elementName = nextPart;
             if (debug) System.err.println("InIf(1): " + _element);
 
         /* Quando estiver perante os numeros das casas dos dez (numeros variados entre os 10 a 19)
@@ -163,7 +160,6 @@ public class NumberReader {
 
             String nextPart = numbersMap.get( _element.element +10 ).getName();
             text = append( _element,  text, nextPart, _element.concat);
-            _element.elementName = nextPart;
 
             if (debug) System.err.println("InIf(2): " + _element);
 
@@ -180,7 +176,6 @@ public class NumberReader {
                 nextPart = numbersMap.get( _element.element * _element.baseClasss).getName();
             }
             text = append( _element, text, nextPart, _element.concat);
-            _element.elementName = nextPart;
             if (debug) System.err.println("InIf(3): " + _element);
 
         } else if( _element.element > 0 ) {
